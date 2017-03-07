@@ -65,12 +65,13 @@ final class MetaBoxFile {
 	}
 
 	public function metaBoxFileDetails () {
+		$post_id = Helpers::getPostID();
 		?>
 		<table class="wp-list-table widefat fixed striped">
-			<tr><th>Name</th><td>screen-shot-2017-03-06-at-7-04-26-pm.png</td></tr>
-			<tr><th>Type</th><td>PDF</td></tr>
-			<tr><th>Size</th><td>1.36 MB</td></tr>
-			<tr><th>No. Downloads</th><td>123</td></tr>
+			<tr><th>Name</th><td><?php echo get_post_meta( $post_id, 'sharedrive_file_name', true ); ?></td></tr>
+			<tr><th>Type</th><td><?php echo get_post_meta( $post_id, 'sharedrive_file_type', true ); ?></td></tr>
+			<tr><th>Size</th><td><?php echo number_format( absint( get_post_meta( $post_id, 'sharedrive_file_size', true ) ) / 1000000, 3 ); ?> MB</td></tr>
+			<tr><th>No. Downloads</th><td>0</td></tr>
 		</table>
 		<?php
 	}
