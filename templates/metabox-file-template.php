@@ -37,7 +37,7 @@ $post_id = Sharedrive\Helpers::getPostID();
 				<?php $file = get_post_meta( $post_id, 'sharedrive_file_name', true  ); ?>
 				<?php if ( ! empty ( $file ) ) { ?>
 					<?php echo esc_html( $file ); ?>
-					<a href="#" title="">
+					<a href="<?php echo esc_url( Sharedrive\Download::getDownloadUri( $post_id ) ); ?>" title="<?php echo esc_attr_e('Download File', 'sharedrive'); ?>">
 						<?php esc_html_e('(Download File)', 'sharedrive'); ?>
 					</a>
 				<?php } else { ?>
