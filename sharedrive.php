@@ -86,6 +86,9 @@ require_once SHAREDRIVE_DIR_PATH . 'classes/taxonomy-directory.php';
 // Include File Metabox.
 require_once SHAREDRIVE_DIR_PATH . 'classes/meta-box-file.php';
 
+// Include The Download Script
+require_once SHAREDRIVE_DIR_PATH . 'classes/download.php';
+
 // Include Sharedrive Single File.
 require_once SHAREDRIVE_DIR_PATH . 'classes/single-file.php';
 
