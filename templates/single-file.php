@@ -17,8 +17,6 @@
  * @link     github.com/codehaiku/sharedrive The Plugin Repository
  */
 
-namespace Sharedrive;
-
 if (! defined('ABSPATH') ) {
     return;
 }
@@ -37,7 +35,7 @@ if (! defined('ABSPATH') ) {
 					3.4 MB
 				</div>
 				<div class="sd-download">
-					<a href="#" class="button">
+					<a href="<?php echo esc_url( Sharedrive\Download::getDownloadUri( get_the_ID() ) ); ?>" class="button">
 						<?php esc_html_e('Download', 'sharedrive'); ?>
 					</a>
 				</div>
