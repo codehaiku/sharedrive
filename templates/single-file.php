@@ -26,11 +26,15 @@ if (! defined('ABSPATH') ) {
 		<div class="sd-left-column">
 			<div class="sd-left-column-wrap">
 				<div class="sd-title">
-					<?php echo the_title(); ?>
+					<h3>
+						<a href="<?php echo esc_url(the_permalink()); ?>" title="<?php echo esc_attr( the_title() ); ?>">
+							<?php the_title(); ?>
+						</a>
+					</h3>
 				</div>
-				<div class="sd-icon">
-					<i class="material-icons md-24">ic_picture_as_pdf</i>
-				</div>
+				
+				<div class="sd-icon"></div>
+
 				<div class="sd-file-size">
 					3.4 MB
 				</div>
