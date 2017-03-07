@@ -53,7 +53,7 @@ final class Download
 
 			if ( file_exists( $file ) ) {
 
-			   	$this->setDownloadableHeader( $file );
+			   	$this->setDownloadableHeader( $file, $post_id );
 			    
 			    readfile( $file );
 
@@ -64,14 +64,20 @@ final class Download
 		}
 	}
 
-	protected function setDownloadableHeader( $file ) {
+	protected function setDownloadableHeader( $file, $post_id ) {
 
 		if ( empty ( $file ) ) {
 			return;
 		}
 
+		$the_file = get_post( $post_id );
+		$content_type = get_post_meta( $the_file->ID, 'sharedrive_file_type', true );
+		
+		if ( empty ( $content_type ) ) {
+			$content_type = 'application/octet-stream';
+		}
 		header('Content-Description: File Transfer');
-	    header('Content-Type: application/octet-stream');
+	    header('Content-Type: ' . $content_type);
 	    header('Content-Disposition: attachment; filename="' . basename( $file ) . '"');
 	    header('Expires: 0');
 	    header('Cache-Control: must-revalidate');
