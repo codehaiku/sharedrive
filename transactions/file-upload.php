@@ -43,8 +43,11 @@ if ( ! $sensio_fs->exists( $user_upload_dir ) ) {
 
 function sd_upload_file( $files = '', $destination = '', Filesystem $sensio_fs ) {
 	try {
+
 		$tmp_file_name = $files['file']['name'];
 		$tmp_file_location = $files['file']['tmp_name'];
+		$tmp_file_type = $files['file']['type'];
+		$tmp_file_size = $files['file']['size'];
 
 		$file_name = pathinfo( $tmp_file_name, PATHINFO_FILENAME );
 		$file_extension = pathinfo( $tmp_file_name, PATHINFO_EXTENSION );
@@ -54,6 +57,8 @@ function sd_upload_file( $files = '', $destination = '', Filesystem $sensio_fs )
 		$sensio_fs->copy( $tmp_file_location, trailingslashit( $destination ) . $destination_file_name );
 		// Update the post meta.
 		update_post_meta( absint( $_POST['post_id'] ), 'sharedrive_file_name', $destination_file_name );
+		update_post_meta( absint( $_POST['post_id'] ), 'sharedrive_file_type', $tmp_file_type );
+		update_post_meta( absint( $_POST['post_id'] ), 'sharedrive_file_size', $tmp_file_size );
 
 	} catch( IOExceptionInterface $e ) {
 		echo  $e->getMessage();
