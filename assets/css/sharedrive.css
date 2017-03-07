@@ -1,0 +1,83 @@
+#sharedrive-single-file {
+	border: 1px solid #ececec;
+}
+
+.sharedrive-single-file-wrap {
+	display: table;
+	width: 100%;
+}
+
+.sharedrive-single-file-wrap .sd-right-column,
+.sharedrive-single-file-wrap .sd-left-column {
+	display: table-cell;
+	vertical-align: middle;
+	padding: 15px;
+}
+
+
+.sharedrive-single-file-wrap .sd-left-column {
+	width: 40%;
+	text-align: center;
+	background: #ECECEC;
+	box-shadow: inset -2px 0 3px 0 rgba(197,197,197,0.50);
+}
+
+.sharedrive-single-file-wrap .sd-right-column {
+	width: 55%;
+}
+
+.sharedrive-single-file-wrap .sd-file-properties ul {
+	margin: 0;
+	padding: 0;
+}
+
+.sharedrive-single-file-wrap .sd-right-column .sd-file-owner {
+    display: table;
+    width: 100%;
+    border-bottom: 1px solid #F3EEEE;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.sharedrive-single-file-wrap .sd-right-column .sd-file-owner-avatar, 
+.sharedrive-single-file-wrap .sd-right-column .sd-file-owner-name {
+	display: table-cell;
+	width: 50%;
+	vertical-align: middle;
+} 
+
+.sharedrive-single-file-wrap .sd-right-column .sd-file-owner-avatar {
+	width: 10%;
+} 
+.sharedrive-single-file-wrap .sd-right-column .sd-file-owner-name {
+	width: 90%;
+	padding-left: 10px;
+}
+
+.sharedrive-single-file-wrap .sd-file-properties ul li {
+	list-style: none;
+}
+
+.sharedrive-single-file-wrap .sd-file-properties div.sd-file-properties-list {
+	font-size: 12px;
+}
+
+.sharedrive-single-file-wrap .sd-file-properties ul.sd-file-properties-list {
+	display: table;
+	width: 100%;
+}
+
+.sharedrive-single-file-wrap .sd-file-properties ul li.sd-file-properties-key {
+	font-weight: bold;
+}
+.sharedrive-single-file-wrap .sd-file-properties ul li.sd-file-properties-key,
+.sharedrive-single-file-wrap .sd-file-properties ul li.sd-file-properties-value {
+	display: table-cell;
+	width: 50%;
+	padding: 5px 0;
+}
+.sharedrive-single-file-wrap .sd-file-properties ul li.sd-file-properties-key {
+	width: 40%;
+}
+.sharedrive-single-file-wrap .sd-file-properties ul li.sd-file-properties-value {
+	width: 60%;
+}
