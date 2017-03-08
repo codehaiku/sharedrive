@@ -20,6 +20,11 @@ if ( isset( $_FILES['file']['size'] ) ) {
 
 // Basic Validations.
 
+// Only logged-in users are allowed to upload file.
+if ( ! is_user_logged_in() ) {
+	wp_die( __('Are you sure you want to do this?', 'sharedrive') );
+}
+
 // File size should not be 0. File size is usually empty when uploaded file > max_upload_size.
 if ( 0 === $tmp_file_size  ) {
 	$response = wp_json_encode(array(
