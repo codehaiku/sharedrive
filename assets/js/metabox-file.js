@@ -75,13 +75,8 @@ jQuery( document ).ready( function($) {
 
             $('#filelist').append('<li class="sd-success">' + server_response.message + '</li>');
 
-            if ( UploadedFIles.length >= 1 ) {
-                $.each( UploadedFIles, function( index, file ){
-                    file_name = file.name;
-                });
-            }
-            $('input#title').val(file_name);
-            $('#new-post-slug').val(file_name);
+            $('input#title').val(file.name);
+            $('#new-post-slug').val(file.name);
             $('#sd-current-file-object').html( $('input#title').val() );
         }
     });
