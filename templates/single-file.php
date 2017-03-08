@@ -36,7 +36,7 @@ if (! defined('ABSPATH') ) {
 				<div class="sd-icon"></div>
 
 				<div class="sd-file-size">
-					3.4 MB
+					<?php echo Sharedrive\Helpers::formatSize( get_post_meta( get_the_ID(), 'sharedrive_file_size', true ) ); ?> 
 				</div>
 				<div class="sd-download">
 					<a href="<?php echo esc_url( Sharedrive\Download::getDownloadUri( get_the_ID() ) ); ?>" class="button">
@@ -76,7 +76,7 @@ if (! defined('ABSPATH') ) {
 									<?php esc_html_e('File Size:', 'sharedrive'); ?>
 								</li>
 								<li class="sd-file-properties-value">
-									3.4 MB
+									<?php echo Sharedrive\Helpers::formatSize( get_post_meta( get_the_ID(), 'sharedrive_file_size', true ) ); ?> 
 								</li>
 							</ul>
 							<!-- Last Modified -->
@@ -98,14 +98,17 @@ if (! defined('ABSPATH') ) {
 								</li>
 							</ul>
 							<!-- Description -->
-							<ul class="sd-file-properties-list">
-								<li class="sd-file-properties-key">
-									<?php esc_html_e('Description:', 'sharedrive'); ?>
-								</li>
-								<li class="sd-file-properties-value">
-									<?php echo wp_kses( get_post_meta( get_the_ID(), 'sd-file-description', true ) , 'post' ); ?>
-								</li>
-							</ul>
+							<?php $file_desciption = get_post_meta( get_the_ID(), 'sd-file-description', true ); ?>
+							<?php if ( ! empty ( $file_desciption ) ) {?>
+								<ul class="sd-file-properties-list">
+									<li class="sd-file-properties-key">
+										<?php esc_html_e('Description:', 'sharedrive'); ?>
+									</li>
+									<li class="sd-file-properties-value">
+										<?php echo wp_kses( $file_desciption , 'post' ); ?>
+									</li>
+								</ul>
+							<?php } ?>
 						</ul>
 					</div>
 				</div>
