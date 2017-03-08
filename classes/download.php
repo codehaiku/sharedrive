@@ -45,23 +45,36 @@ final class Download
 		
 		$post_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT );
 
+		if ( empty ( $post_id ) ) {
+			return;
+		}
+
 		if ( isset( $_GET['sd_download'] ) ) {
 
 			do_action('sharedrive_before_download');
 
 			$file = Download::getAttachmentPath( $post_id );
 
+			$download_count = absint( get_post_meta( $post_id, 'sharedrive_file_download', true ) );
+			
 			if ( file_exists( $file ) ) {
 
 			   	$this->setDownloadableHeader( $file, $post_id );
 			    
-			    readfile( $file );
+			    if ( readfile( $file ) ) {
+			    	// update the download count if the file is successfully served.
+			    	$download_count += 1;
+			    	update_post_meta( $post_id, 'sharedrive_file_download', $download_count );
+			    }
 
 				do_action('sharedrive_after_download');
 
 			    exit;
 			}
 		}
+
+		return;
+
 	}
 
 	protected function setDownloadableHeader( $file, $post_id ) {
@@ -76,6 +89,7 @@ final class Download
 		if ( empty ( $content_type ) ) {
 			$content_type = 'application/octet-stream';
 		}
+		
 		header('Content-Description: File Transfer');
 	    header('Content-Type: ' . $content_type);
 	    header('Content-Disposition: attachment; filename="' . basename( $file ) . '"');
