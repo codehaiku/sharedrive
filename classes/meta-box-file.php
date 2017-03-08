@@ -57,7 +57,7 @@ final class MetaBoxFile {
 
 		add_meta_box( 
 	        'sharedrive-file-metabox-control',
-	        __( 'File Update', 'sharedrive' ),
+	        sprintf( __( 'File Update (Max %s)', 'sharedrive' ), Helpers::formatSize( wp_max_upload_size() ) ),
 	        array( $this, 'metaBoxForm' ),
 	        'file', 'normal', 'high'
 	    );
@@ -68,10 +68,33 @@ final class MetaBoxFile {
 		$post_id = Helpers::getPostID();
 		?>
 		<table class="wp-list-table widefat fixed striped">
-			<tr><th>Name</th><td><?php echo get_post_meta( $post_id, 'sharedrive_file_name', true ); ?></td></tr>
-			<tr><th>Type</th><td><?php echo get_post_meta( $post_id, 'sharedrive_file_type', true ); ?></td></tr>
-			<tr><th>Size</th><td><?php echo number_format( absint( get_post_meta( $post_id, 'sharedrive_file_size', true ) ) / 1000000, 3 ); ?> MB</td></tr>
-			<tr><th>No. Downloads</th><td>0</td></tr>
+			
+			<?php $sharedrive_file_name = get_post_meta( $post_id, 'sharedrive_file_name', true ); ?>
+			<?php $sharedrive_file_type = get_post_meta( $post_id, 'sharedrive_file_type', true ); ?>
+			<?php $sharedrive_file_size = Helpers::formatSize( get_post_meta( $post_id, 'sharedrive_file_size', true ) ); ?>
+
+			<?php if ( ! empty( $sharedrive_file_name ) ) { ?>
+				<tr>
+					<th><strong><?php echo esc_html_e('Name', 'sharedrive'); ?></strong></th>
+					<td><?php echo esc_html( $sharedrive_file_name ); ?></td>
+				</tr>
+			<?php } ?>
+			<?php if ( ! empty( $sharedrive_file_type ) ) { ?>
+				<tr>
+					<th><strong><?php echo esc_html_e('Type', 'sharedrive'); ?></strong></th>
+					<td><?php echo esc_html( $sharedrive_file_type ); ?></td>
+				</tr>
+			<?php } ?>
+			<?php if ( ! empty( $sharedrive_file_size ) ) { ?>
+				<tr>
+					<th><strong><?php echo esc_html_e('Size', 'sharedrive'); ?></strong></th>
+					<td><?php echo esc_html( $sharedrive_file_size ); ?></td>
+				</tr>
+			<?php } ?>
+			<tr>
+				<th><strong>No. Downloads</strong></th>
+				<td><?php echo absint( get_post_meta( $post_id, 'sharedrive_file_download', true ) ); ?></td>
+			</tr>
 		</table>
 		<?php
 	}
