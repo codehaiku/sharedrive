@@ -55,4 +55,16 @@ final class Helpers
 
 		return 0;
 	}
+
+	public static function formatSize( $size = 0 ) {
+		if ( 0 === $size ) {
+			return '0 Bytes';
+		}
+
+		return number_format( $size / 1000000, 2 ) . ' MB';
+	}
+
+	public static function stop() {
+		die();
+	}
 }
