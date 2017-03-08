@@ -20,6 +20,10 @@ jQuery( document ).ready( function($) {
     });
     
     uploader.init();
+    
+    uploader.bind('Error', function( uploader, error ) {
+        console.error( error );
+    });
 
     uploader.bind( 'FilesAdded', function(up, files) {
 
@@ -46,15 +50,40 @@ jQuery( document ).ready( function($) {
     });
 
     uploader.bind('UploadComplete', function(files, UploadedFIles){
-        var file_name = '';
-        if ( UploadedFIles.length >= 1 ) {
-            $.each( UploadedFIles, function( index, file ){
-                file_name = file.name;
-            });
+       // Upload is Complete callback
+    });
+
+    uploader.bind('FileUploaded', function (instance, file, server ){
+        
+        var server_response = JSON.parse(server.response);
+
+        // Usually when the file size is greater than the max_post_size, the server
+        // will not accept the file. Hence, returning null. We need to catch this error.
+        // '0' is return from wp-admin/admin-ajax.php if there are no readable output.
+        if ( 0 === server_response  ) {
+            $('#filelist').append('<li class="sd-error">Error processing files. The file is too large for the server to accept.</li>');
+            return;
         }
-        $('input#title').val(file_name);
-        $('#new-post-slug').val(file_name);
-        $('#sd-current-file-object').html( $('input#title').val() );
+
+        if ( 201 === server_response.status ) {
+            $('#filelist').append('<li class="sd-error">'+server_response.message+'</li>');
+            return;
+        }
+        if ( 200 === server_response.status ) {
+
+            var file_name = '';
+
+            $('#filelist').append('<li class="sd-success">' + server_response.message + '</li>');
+
+            if ( UploadedFIles.length >= 1 ) {
+                $.each( UploadedFIles, function( index, file ){
+                    file_name = file.name;
+                });
+            }
+            $('input#title').val(file_name);
+            $('#new-post-slug').val(file_name);
+            $('#sd-current-file-object').html( $('input#title').val() );
+        }
     });
 
     document.getElementById('start-upload').onclick = function() {
