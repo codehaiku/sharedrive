@@ -95,7 +95,7 @@ function sd_upload_file( $files = '', $destination = '', Filesystem $sensio_fs )
 
 		$response = wp_json_encode(array(
 				'status' => 200,
-				'message' => __('File has been successfully uploaded. Click the "Update" button in the right side of the corner to update the post meta display.', 'sharedrive')
+				'message' => __('File has been successfully uploaded. Please save/update the post.', 'sharedrive')
 			));
 		echo $response;
 		Sharedrive\Helpers::stop();
