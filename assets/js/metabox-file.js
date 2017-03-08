@@ -2,7 +2,6 @@ jQuery( document ).ready( function($) {
 
     var uploader = new plupload.Uploader({
         browse_button: 'browse', // this can be an id of a DOM element or the DOM element itself
-        //url: 'http://thrive.dsc/wp-admin/admin-ajax.php?action=file_upload_action&post_id=' + $('#post_ID').val(),
         url: ajaxurl,
         filters: {
             mime_types : [
@@ -11,6 +10,7 @@ jQuery( document ).ready( function($) {
                 { title : "Doc Files", extensions : "doc,docx,pdf,xls" },
                 { title : "PDF Files", extensions : "pdf" }
             ],
+            max_file_size: 1000000 // 1MB
         },
         multi_selection: false,
         multipart_params: {
@@ -22,10 +22,22 @@ jQuery( document ).ready( function($) {
     uploader.init();
     
     uploader.bind('Error', function( uploader, error ) {
-        console.error( error );
+
+        var error_message = '';
+        
+        if ( error.message ) {
+            error_message = error.message;
+        }
+        
+        $('#start-upload').addClass('button-disabled');
+
+        $('#filelist').html('<li class="sd-error">'+error_message+'</li>');
+
+        return;
+
     });
 
-    uploader.bind( 'FilesAdded', function(up, files) {
+    uploader.bind( 'FilesAdded', function( up, files ) {
 
         var html = '';
 
@@ -43,14 +55,49 @@ jQuery( document ).ready( function($) {
 
         document.getElementById('filelist').innerHTML = html;
 
+        $('#start-upload').removeClass('button-disabled');
+
+        return;
+
     });
 
     uploader.bind('UploadProgress', function(up, file) {
-        document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+        $('#'+file.id+ ' b ').html( '<span>' + file.percent + "%</span>" );
+        console.log($('#'+file.id+ ' b '));
     });
 
     uploader.bind('UploadComplete', function(files, UploadedFIles){
        // Upload is Complete callback
+    });
+
+    // Upload Filter Error
+    plupload.addFileFilter('max_file_size', function(maxSize, file, instanceCallBack) {
+        var undef;
+        // Invalid file size
+        if (file.size !== undef && maxSize && file.size > maxSize) {
+            this.trigger('Error', {
+                code : plupload.FILE_SIZE_ERROR,
+                message : plupload.translate('Error: The selected file size exceeds the maximum upload size.' ),
+                file : file
+            });
+            instanceCallBack(false);
+        } else {
+
+            instanceCallBack(true);
+        }
+    });
+
+    plupload.addFileFilter('mime_types', function(mime_types, file,instanceCallBack) {
+        if ( mime_types.regexp.test(file.name) ) {
+            instanceCallBack(true);
+        } else {
+            this.trigger('Error', {
+                code : plupload.FILE_SIZE_ERROR,
+                message : plupload.translate('Error: The selected type of file is currently not supported.' ),
+                file : file
+            });
+            instanceCallBack(false);
+        }
     });
 
     uploader.bind('FileUploaded', function (instance, file, server ){
