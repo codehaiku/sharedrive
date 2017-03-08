@@ -20,7 +20,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	return;
 }
-
 $post_id = Sharedrive\Helpers::getPostID();
 ?>
 
@@ -67,7 +66,7 @@ $post_id = Sharedrive\Helpers::getPostID();
     	<a id="browse" class="button button-primary" href="javascript:;">
     		<?php echo esc_html_e('Browse File', 'sharedrive'); ?>
     	</a>
-    	<a id="start-upload" class="button button-secondary" href="javascript:;">
+    	<a id="start-upload" class="button button-secondary button-disabled" href="javascript:;">
     		<?php echo esc_html_e('Start Upload', 'sharedrive'); ?>
     	</a>
     </p>
