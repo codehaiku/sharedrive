@@ -29,6 +29,8 @@ $post_id = Sharedrive\Helpers::getPostID();
 	background: #f1f1f1;
 	padding: 5px 10px;
 }
+#filelist li.sd-success{ color: #558B2F; }
+#filelist li.sd-error{ color: #f44336; }
 </style>
 <p id="sd-attached-file">
 	<label for="sd-current-file-object">
