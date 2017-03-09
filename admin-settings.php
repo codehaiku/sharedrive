@@ -43,6 +43,7 @@ final class AdminSettings
     {
         
         add_action('admin_menu', array( $this, 'adminMenu' ));
+        add_action('admin_head', array( $this, 'adminJsConfig' ) );
 
     }
 
@@ -116,6 +117,24 @@ final class AdminSettings
              </form>
         </div>
         
+        <?php
+    }
+
+    public function adminJsConfig(){
+        ?>
+        <script>
+            var sharedrive = {
+                settings: {
+                    mime_types_allowed: [
+                        { title : "Image files", extensions : "jpg,png,gif,jpeg" },
+                        { title : "Zip files", extensions : "zip" },
+                        { title : "Doc Files", extensions : "doc,docx,pdf,xls" },
+                        { title : "PDF Files", extensions : "pdf" }
+                    ],
+                    max_file_size: <?php echo wp_max_upload_size(); ?>
+                }
+            }
+        </script>
         <?php
     }
 
