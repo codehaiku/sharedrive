@@ -77,6 +77,9 @@ require_once SHAREDRIVE_DIR_PATH . 'admin-settings.php';
 // Include Static Helpers.
 require_once SHAREDRIVE_DIR_PATH . 'classes/helpers.php';
 
+// Include Sharedrive Shortcodes.
+require_once SHAREDRIVE_DIR_PATH . 'classes/file.php';
+
 // Include Post Type Registration Class.
 require_once SHAREDRIVE_DIR_PATH . 'classes/post-type-file.php';
 
