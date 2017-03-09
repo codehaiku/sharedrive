@@ -4,13 +4,8 @@ jQuery( document ).ready( function($) {
         browse_button: 'browse', // this can be an id of a DOM element or the DOM element itself
         url: ajaxurl,
         filters: {
-            mime_types : [
-                { title : "Image files", extensions : "jpg,png,gif,jpeg" },
-                { title : "Zip files", extensions : "zip" },
-                { title : "Doc Files", extensions : "doc,docx,pdf,xls" },
-                { title : "PDF Files", extensions : "pdf" }
-            ],
-            max_file_size: 1000000 // 1MB
+            mime_types : sharedrive.settings.mime_types_allowed,
+            max_file_size: sharedrive.settings.max_file_size // 1MB
         },
         multi_selection: false,
         multipart_params: {
@@ -50,7 +45,7 @@ jQuery( document ).ready( function($) {
         }
         
         plupload.each(files, function( file ) {
-            html += '<li id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b</li>';
+            html += '<li id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></li>';
         });
 
         document.getElementById('filelist').innerHTML = html;
