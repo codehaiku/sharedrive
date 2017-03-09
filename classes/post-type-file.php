@@ -39,10 +39,10 @@ final class FilePostType
     public function __construct() {
        
         add_action('init', array( $this, 'index' ));
-
         register_activation_hook( __FILE__, 'flushOnActivate' );
 
     }
+
     /**
      * Redirects pages into our login page.
      *
@@ -51,7 +51,7 @@ final class FilePostType
     public static function index() 
     {
         $labels = array(
-            'name'               => esc_html__( 'Files', 'sharedrive' ),
+            'name'               => esc_html__( 'All Files', 'sharedrive' ),
             'singular_name'      => esc_html__( 'File', 'sharedrive' ),
             'menu_name'          => esc_html__( 'Files', 'sharedrive' ),
             'name_admin_bar'     => esc_html__( 'File', 'sharedrive' ),
