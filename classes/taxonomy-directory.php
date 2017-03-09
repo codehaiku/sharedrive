@@ -19,6 +19,8 @@
 
 namespace Sharedrive;
 
+use WP_Query;
+
 if (! defined('ABSPATH') ) {
     return;
 }
@@ -36,28 +38,58 @@ if (! defined('ABSPATH') ) {
 final class TaxonomyDirectory
 {
 	public function __construct() {
+		
 		add_action('init', array( $this, 'registerTaxonomy' ));
+		
+		//add_action( 'directory_add_form_fields', array( $this, 'directoryAddFileField' ), 10, 2 );
+		add_action( 'directory_edit_form_fields', array( $this, 'directoryEditFileField' ), 10, 2 );
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
+
+		add_action( 'wp_ajax_file_bulk_upload_action', array( $this, 'fileBulkUploadAction' )); 
+
         register_activation_hook( __FILE__, 'flushOnActivate' );
+
+	}
+
+	public function fileBulkUploadAction() {
+
+		require_once SHAREDRIVE_DIR_PATH . 'transactions/file-bulk-upload.php';
+
+		return;
+
+	}
+
+	public function enqueue() {
+
+		wp_enqueue_script( 
+			'sharedrive-taxonomy-file-js', 
+			SHAREDRIVE_DIR_URL . 'assets/js/taxonomy-file.js', 
+			array( 'jquery', 'plupload-all' ) 
+		);
+		
+		return;
 	}
 
 	public function registerTaxonomy() {
+
 		$labels = array(
-			'name'                       => _x( 'Directories', 'taxonomy general name', 'textdomain' ),
-			'singular_name'              => _x( 'Directory', 'taxonomy singular name', 'textdomain' ),
-			'search_items'               => __( 'Search Directories', 'textdomain' ),
-			'popular_items'              => __( 'Popular Directories', 'textdomain' ),
-			'all_items'                  => __( 'All Directories', 'textdomain' ),
+			'name'                       => esc_html__( 'Directories', 'sharedrive' ),
+			'singular_name'              => esc_html__( 'Directory', 'sharedrive' ),
+			'search_items'               => esc_html__( 'Search Directories', 'sharedrive' ),
+			'popular_items'              => esc_html__( 'Popular Directories', 'sharedrive' ),
+			'all_items'                  => esc_html__( 'All Directories', 'sharedrive' ),
 			'parent_item'                => null,
 			'parent_item_colon'          => null,
-			'edit_item'                  => __( 'Edit Directory', 'textdomain' ),
-			'update_item'                => __( 'Update Directory', 'textdomain' ),
-			'add_new_item'               => __( 'Add New Directory', 'textdomain' ),
-			'new_item_name'              => __( 'New Directory Name', 'textdomain' ),
-			'separate_items_with_commas' => __( 'Separate writers with commas', 'textdomain' ),
-			'add_or_remove_items'        => __( 'Add or remove writers', 'textdomain' ),
-			'choose_from_most_used'      => __( 'Choose from the most used writers', 'textdomain' ),
-			'not_found'                  => __( 'No writers found.', 'textdomain' ),
-			'menu_name'                  => __( 'Directories', 'textdomain' ),
+			'edit_item'                  => esc_html__( 'Edit Directory', 'sharedrive' ),
+			'update_item'                => esc_html__( 'Update Directory', 'sharedrive' ),
+			'add_new_item'               => esc_html__( 'Add New Directory', 'sharedrive' ),
+			'new_item_name'              => esc_html__( 'New Directory Name', 'sharedrive' ),
+			'separate_items_with_commas' => esc_html__( 'Separate writers with commas', 'sharedrive' ),
+			'add_or_remove_items'        => esc_html__( 'Add or remove writers', 'sharedrive' ),
+			'choose_from_most_used'      => esc_html__( 'Choose from the most used writers', 'sharedrive' ),
+			'not_found'                  => esc_html__( 'No writers found.', 'sharedrive' ),
+			'menu_name'                  => esc_html__( 'Directories', 'sharedrive' ),
 		);
 
 		$args = array(
@@ -79,5 +111,49 @@ final class TaxonomyDirectory
 
         return;
     }
+
+    // Add term page
+	public function directoryAddFileField() {
+	// this will add the custom meta field to the add new term page
+	?>
+		<div class="form-field">
+			<label for="term_meta[custom_term_meta]"><?php _e( 'Example meta field', 'sharedrive' ); ?></label>
+			<input type="text" name="term_meta[custom_term_meta]" id="term_meta[custom_term_meta]" value="">
+			<p class="description"><?php _e( 'Enter a value for this field','sharedrive' ); ?></p>
+		</div>
+	<?php
+	}
+
+	public function directoryEditFileField( $instance, $taxonomy ) {
+	
+	// put the term ID into a variable
+	$t_id = $instance->term_id;
+ 
+	// retrieve the existing value(s) for this meta field. This returns an array
+	$term_meta = get_option( "taxonomy_$t_id" ); ?>
+	<tr class="form-field">
+		<th scope="row" valign="top">
+			<label for="term_meta[custom_term_meta]">
+				<?php esc_html_e( 'Add Files', 'sharedrive' ); ?>
+			</label>
+		</th>
+		<td>
+			<ul id="filelist" style="margin-top: 0; margin-bottom: 0;"></ul>
+			<div id="sharedrive-file-window">
+		    	<a id="sharedrive-browse-files" class="button button-secondary" href="javascript:;">
+		    		<?php echo esc_html_e('Browse File', 'sharedrive'); ?>
+		    	</a>
+		    	<a id="sharedrive-start-upload" class="button button-secondary" href="javascript:;">
+		    		<?php echo esc_html_e('Start Upload', 'sharedrive'); ?>
+		    	</a>
+		    	<p class="description">
+		    		<?php esc_html_e("Click 'Browse File' to get started. You can select multiple files.", 'sharedrive'); ?>
+		    	</p>
+			</div>
+		</td>
+	</tr>	
+	<?php
+	}
 }
+
 new TaxonomyDirectory();
