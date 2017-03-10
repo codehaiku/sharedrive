@@ -20,6 +20,7 @@
 	text-align: center;
 	background: #ECECEC;
 	box-shadow: inset -2px 0 3px 0 rgba(197,197,197,0.50);
+	max-width: 320px;
 }
 
 .sharedrive-single-file-wrap .sd-right-column {
@@ -74,6 +75,8 @@
 	display: table-cell;
 	width: 50%;
 	padding: 5px 0;
+	word-wrap: break-word;
+    max-width: 165px;
 }
 .sharedrive-single-file-wrap .sd-file-properties ul li.sd-file-properties-key {
 	width: 40%;
