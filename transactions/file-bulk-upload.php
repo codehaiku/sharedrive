@@ -19,13 +19,19 @@
 
 require_once SHAREDRIVE_DIR_PATH . 'classes/file.php';
 
+use Sharedrive\File;
+
 if ( ! defined('ABSPATH') ) {
     return;
 }
 
+File::initMimeTypes();
+
 $pid = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
 $taxonomy_id = filter_input( INPUT_POST, 'taxonomy_id', FILTER_VALIDATE_INT );
-$allowed_files = array('jpg','zip');
+
+$allowed_files = File::getAllowedFileTypes();
+$banned_files = File::getBannedTypes();
 
 // Only logged-in users are allowed to upload file.
 if ( ! is_user_logged_in() ) {
@@ -42,23 +48,53 @@ if ( isset( $_FILES['file'] ) ) {
 	$type  = $_FILES['file']['type'];
 	$size  = $_FILES['file']['size'];
 	$error = $_FILES['file']['error'];
-	$tmp_name = $_FILES['file']['size'];
 	$author = get_current_user_id();
 
 	$file_name = pathinfo( $name, PATHINFO_FILENAME );
 	$file_extension = pathinfo( $name, PATHINFO_EXTENSION );
 	$destination_file_name = sanitize_title( $file_name ) . '.' . $file_extension;
 
+	// File size is usually empty when uploaded file > max_upload_size.
+	if ( 0 === $size  ) {
+		$response = wp_json_encode(
+			array(
+				'status' => 201,
+				'message' => sprintf( 
+					__('Error: Max upload size issue. Uploaded files should be less than %s', 'sharedrive'), 
+					Sharedrive\Helpers::formatSize( wp_max_upload_size() ) 
+					)
+			));
+		echo $response;
+		Sharedrive\Helpers::stop();
+	}
+
 	if ( ! in_array( $file_extension, $allowed_files ) ) {
 		$response = wp_json_encode(
 			array(
 				'status' => 201,
 				'message' => sprintf( 
-					sprintf( esc_html__('Error uploading file. The file type (.%s) is not allowed', 'sharedrive'), $file_extension ), 
-					Sharedrive\Helpers::formatSize( $max_upload_size ) 
-					)
-			));
+							esc_html__('Error uploading file. The file type (.%s) is not allowed', 'sharedrive'), 
+							$file_extension 
+						), 
+				)
+			);
 		echo $response;
+		Sharedrive\Helpers::stop();
+	}
+
+	if ( in_array( $file_extension, $banned_files ) ) {
+
+		$response = wp_json_encode(
+			array(
+				'status' => 201,
+				'message' =>  sprintf( 
+							esc_html__('Error uploading file. The file type (.%s) is not allowed', 'sharedrive'), 
+							$file_extension 
+						)
+			));
+		
+		echo $response;
+
 		Sharedrive\Helpers::stop();
 	}
 
