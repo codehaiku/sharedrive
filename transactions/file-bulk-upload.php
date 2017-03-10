@@ -25,8 +25,12 @@ if ( ! defined('ABSPATH') ) {
 
 $pid = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT );
 $taxonomy_id = filter_input( INPUT_POST, 'taxonomy_id', FILTER_VALIDATE_INT );
+$allowed_files = array('jpg','zip');
 
-
+// Only logged-in users are allowed to upload file.
+if ( ! is_user_logged_in() ) {
+	wp_die( __('Are you sure you want to do this?', 'sharedrive') );
+}
 
 if ( empty( $taxonomy_id ) ) {
 	return;
@@ -44,6 +48,19 @@ if ( isset( $_FILES['file'] ) ) {
 	$file_name = pathinfo( $name, PATHINFO_FILENAME );
 	$file_extension = pathinfo( $name, PATHINFO_EXTENSION );
 	$destination_file_name = sanitize_title( $file_name ) . '.' . $file_extension;
+
+	if ( ! in_array( $file_extension, $allowed_files ) ) {
+		$response = wp_json_encode(
+			array(
+				'status' => 201,
+				'message' => sprintf( 
+					sprintf( esc_html__('Error uploading file. The file type (.%s) is not allowed', 'sharedrive'), $file_extension ), 
+					Sharedrive\Helpers::formatSize( $max_upload_size ) 
+					)
+			));
+		echo $response;
+		Sharedrive\Helpers::stop();
+	}
 
 	// Create post object
 	$new_file = array(
@@ -66,7 +83,7 @@ if ( isset( $_FILES['file'] ) ) {
 
 	if ( !empty( $file_id ) && $file_id > 0 ) {
 		$file = new Sharedrive\File( $file_id, $_FILES );
-		$file->upload( 'new' )->processHttpUpload();
+		$file->processHttpUpload( 'new', esc_html__('File added. Upload Successful', 'sharedrive') );
 	}
 
 }
