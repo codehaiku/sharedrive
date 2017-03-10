@@ -41,7 +41,8 @@ if ( ! is_user_logged_in() ) {
 
 // File size should not be 0. File size is usually empty when uploaded file > max_upload_size.
 if ( 0 === $tmp_file_size  ) {
-	$response = wp_json_encode(array(
+	$response = wp_json_encode(
+		array(
 			'status' => 201,
 			'message' => sprintf( 
 				__('Max upload size issue. Uploaded files should be less than %s', 'sharedrive'), 
@@ -52,6 +53,6 @@ if ( 0 === $tmp_file_size  ) {
 	Sharedrive\Helpers::stop();
 }
 
-$file->processHttpUpload( 'update', esc_html___('File has been successfully uploaded. Please save/update the post', 'sharedrive') );
+$file->processHttpUpload( 'update', esc_html__('File has been successfully uploaded. Please save/update the post', 'sharedrive') );
 
 Sharedrive\Helpers::stop();
