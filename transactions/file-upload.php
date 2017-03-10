@@ -52,6 +52,6 @@ if ( 0 === $tmp_file_size  ) {
 	Sharedrive\Helpers::stop();
 }
 
-$file->processHttpUpload();
+$file->processHttpUpload( 'update', esc_html___('File has been successfully uploaded. Please save/update the post', 'sharedrive') );
 
 Sharedrive\Helpers::stop();
