@@ -58,7 +58,7 @@ class File {
 
 	}
 
-	public function upload( $type = 'update' ) {
+	public function upload( $type = 'update', $success_message = '' ) {
 
 		try {
 
@@ -74,7 +74,7 @@ class File {
 
 			$response = wp_json_encode(array(
 					'status' => 200,
-					'message' => __('File has been successfully uploaded. Please save/update the post.', 'sharedrive')
+					'message' => $success_message
 				));
 
 			echo $response;
@@ -94,7 +94,7 @@ class File {
 		return;
 	}
 
-	public function processHttpUpload() {
+	public function processHttpUpload( $type = 'update', $success_message = '' ) {
 		// Cleaning up.
 		if ( $this->sensio_fs->exists( $this->destination ) ) {
 			try {
@@ -116,7 +116,7 @@ class File {
 			try {
 			    $this->sensio_fs->mkdir( $this->destination, 0755 );
 			    // Upload (copy) the submitted file into the directory.
-			  	$this->upload( 'update' );
+			  	$this->upload( $type, $success_message );
 			} catch ( IOExceptionInterface $e ) {
 				// Throw an error if there is was an error create a file.
 			    $response = wp_json_encode(array(
@@ -128,7 +128,7 @@ class File {
 			}
 		} else {
 			// The directory already exists. Time to copy the temporary sent file to that directory.
-			$this->upload( 'update' );
+			$this->upload( $type, $success_message );
 		}
 	}
 	
