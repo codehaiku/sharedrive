@@ -83,16 +83,38 @@ jQuery( document ).ready( function($) {
     });
 
     plupload.addFileFilter('mime_types', function(mime_types, file,instanceCallBack) {
+
         if ( mime_types.regexp.test(file.name) ) {
+
+            if ( sharedrive.settings.mime_types_banned.regex.test(file.name) ) {
+
+                this.trigger('Error', {
+                    code : plupload.FILE_SIZE_ERROR,
+                    message : plupload.translate('Error: The selected type of file ('+file.name+') is currently not supported.' ),
+                    file : file
+                });
+
+                instanceCallBack(false);
+
+                return;
+            }
+
             instanceCallBack(true);
+
+            return;
+
         } else {
             this.trigger('Error', {
                 code : plupload.FILE_SIZE_ERROR,
                 message : plupload.translate('Error: The selected type of file is currently not supported.' ),
                 file : file
             });
+
             instanceCallBack(false);
+            
+            return;
         }
+
     });
 
     uploader.bind('FileUploaded', function (instance, file, server ){
