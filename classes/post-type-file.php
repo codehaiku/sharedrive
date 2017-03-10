@@ -38,7 +38,8 @@ final class FilePostType
 
     public function __construct() {
        
-        add_action('init', array( $this, 'index' ));
+        add_action( 'init', array( $this, 'index' ) );
+        add_action( 'delete_post', array( 'Sharedrive\File', 'delete' ), 10 );
         register_activation_hook( __FILE__, 'flushOnActivate' );
 
     }
@@ -96,3 +97,4 @@ final class FilePostType
 }
 
 new FilePostType();
+
