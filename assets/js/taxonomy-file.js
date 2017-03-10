@@ -4,8 +4,8 @@ jQuery( document ).ready( function($) {
         browse_button: 'sharedrive-browse-files', // this can be an id of a DOM element or the DOM element itself
         url: ajaxurl,
         filters: {
-            //mime_types : sharedrive.settings.mime_types_allowed,
-            //max_file_size: sharedrive.settings.max_file_size // 1MB
+            mime_types : sharedrive.settings.mime_types_allowed,
+            max_file_size: sharedrive.settings.max_file_size // 1MB
         },
         multi_selection: true,
         multipart_params: {
