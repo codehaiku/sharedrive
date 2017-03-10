@@ -46,7 +46,7 @@ final class AdminSettings
         add_action('admin_head', array( $this, 'adminJsConfig' ) );
 
     }
-
+    
     /**
      * Display 'Sharedrive' link under 'Settings'
      *
@@ -60,6 +60,8 @@ final class AdminSettings
             'sharedrive', array( $this, 'optionsPage' )
         );
 
+        add_action('admin_init', array( $this, 'registerSettings' ));
+
         return;
     }
 
@@ -71,6 +73,38 @@ final class AdminSettings
     public function registerSettings() 
     {
 
+        // Register our settings section.
+        add_settings_section(
+            'sharedrive-general-group', __('General Settings', 'sharedrive'), 
+            array( $this, 'sectionCallback' ), 'sharedrive-settings-section' 
+        );
+
+        $fields = array(
+            array(
+                'id' => "sd_allowed_file_types",
+                'label' => __('Allowed File Types', 'sharedrive'),
+                'callback' => 'sharedrive_settings_allowed_file_type',
+                'section' => 'sharedrive-settings-section',
+                'group' => 'sharedrive-general-group',
+            ),
+        );
+
+        foreach ( $fields as $field ) {
+                
+            add_settings_field(
+                $field['id'], $field['label'], 
+                $field['callback'], $field['section'], 
+                $field['group']
+            );
+            
+            register_setting('sharedrive-settings-group', $field['id']);
+
+            $file = str_replace('_', '-', $field['callback']);
+            include_once trailingslashit(SHAREDRIVE_DIR_PATH) . 
+            'settings-fields/field-' . sanitize_title($file) . '.php';
+        }
+
+
     }
 
     /**
@@ -80,9 +114,8 @@ final class AdminSettings
      */
     public function sectionCallback() 
     {
-        echo esc_html_e(
-            'All settings related to the 
-        	visibility of your site and pages.', 'sharedrive'
+        esc_html_e(
+            'All settings related to ShareDrive.', 'sharedrive'
         );
         return;
     }
@@ -120,24 +153,23 @@ final class AdminSettings
         <?php
     }
 
-    public function adminJsConfig(){
+    public function adminJsConfig() {
+        $allowed_mime_types = preg_replace( '/\s+/', '', str_replace( ' ', '', implode( ',', File::getAllowedFileTypes() ) ) );
         ?>
         <script>
             var sharedrive = {
                 settings: {
                     mime_types_allowed: [
-                        { title : "Image files", extensions : "jpg,png,gif,jpeg" },
-                        { title : "Zip files", extensions : "zip" },
-                        { title : "Doc Files", extensions : "doc,docx,pdf,xls" },
-                        { title : "PDF Files", extensions : "pdf" }
+                        { title : "Files Allowed", extensions : "<?php echo trim( $allowed_mime_types ); ?>" }
                     ],
-                    max_file_size: <?php echo wp_max_upload_size(); ?>
+                  
                 }
             }
         </script>
-        <?php
+        <?php /* max_file_size: <?php echo wp_max_upload_size();*/
     }
 
 }
 
 $sharedriveSettings = new AdminSettings();
+
