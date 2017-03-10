@@ -26,7 +26,7 @@ jQuery( document ).ready( function($) {
         
         $('#start-upload').addClass('button-disabled');
 
-        $('#filelist').html('<li class="sd-error">'+error_message+'</li>');
+        $('#filelist').append('<li class="sd-error">'+error_message+'</li>');
 
         return;
 
