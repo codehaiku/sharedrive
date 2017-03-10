@@ -34,6 +34,60 @@ jQuery( document ).ready( function($) {
 
     });
 
+    plupload.addFileFilter('mime_types', function(mime_types, file,instanceCallBack) {
+
+        if ( mime_types.regexp.test(file.name) ) {
+
+            if ( sharedrive.settings.mime_types_banned.regex.test(file.name) ) {
+
+                this.trigger('Error', {
+                    code : plupload.FILE_SIZE_ERROR,
+                    message : plupload.translate('Error: The selected type of file ('+file.name+') is currently not supported.' ),
+                    file : file
+                });
+
+                instanceCallBack(false);
+
+                return;
+            }
+
+            instanceCallBack(true);
+
+            return;
+
+        } else {
+            this.trigger('Error', {
+                code : plupload.FILE_SIZE_ERROR,
+                message : plupload.translate('Error: The selected type of file is currently not supported.' ),
+                file : file
+            });
+
+            instanceCallBack(false);
+            
+            return;
+        }
+
+    });
+
+      // Upload Filter Error
+    plupload.addFileFilter('max_file_size', function(maxSize, file, instanceCallBack) {
+        var undef;
+        console.log(maxSize);
+        // Invalid file size
+        if ( file.size !== undef && maxSize && file.size > maxSize) {
+            this.trigger('Error', {
+                code : plupload.FILE_SIZE_ERROR,
+                message : plupload.translate('Error: The selected file size exceeds the maximum upload size.' ),
+                file : file
+            });
+            instanceCallBack(false);
+            return;
+        } else {
+            instanceCallBack(true);
+            return;
+        }
+    });
+
     uploader.bind('Error', function( uploader, error ) {
 
         var error_message = '';
@@ -42,11 +96,13 @@ jQuery( document ).ready( function($) {
             error_message = error.message;
         }
         
-        $('#filelist').append('<li class="sd-error">'+error.file.name + '&nbsp;<strong><span class="sd-error-type">(' + error_message+')</span></strong></li>');
+        $('#filelist').append('<li>'+error.file.name + '&nbsp;<span class="sd-error">(' + error_message+')</span></li>');
 
         return;
 
     });
+
+
 
     uploader.bind('FileUploaded', function (instance, file, server ){
         
