@@ -138,14 +138,56 @@ final class TaxonomyDirectory
 			</label>
 		</th>
 		<td>
+			<style>
+				#sd-attached-file {
+					background: #f1f1f1;
+					padding: 5px 10px;
+				}
+				#filelist .sd-success{ color: #558B2F; }
+				#filelist .sd-error{ color: #f44336; }
+				#sharedrive-file-window p {
+					margin-top: 0;
+					margin-bottom: 15px;
+				}
+			</style>
 			<ul id="filelist" style="margin-top: 0; margin-bottom: 0;"></ul>
 			<div id="sharedrive-file-window">
-		    	<a id="sharedrive-browse-files" class="button button-secondary" href="javascript:;">
-		    		<?php echo esc_html_e('Browse File', 'sharedrive'); ?>
-		    	</a>
-		    	<a id="sharedrive-start-upload" class="button button-secondary" href="javascript:;">
-		    		<?php echo esc_html_e('Start Upload', 'sharedrive'); ?>
-		    	</a>
+				<p>
+					<?php 
+						printf( 
+							esc_html__(
+								'There are %s files attached in this directory.', 
+								'sharedrive'
+							), 
+							'<strong>' . absint( $instance->count ) . '</strong>'
+						); 
+					?>
+					<?php $directory_link = get_term_link( absint( $instance->term_id ), $instance->taxonomy); ?>
+					<a target="__blank" href="<?php echo esc_url( $directory_link ); ?>" title="<?php echo esc_attr( $instance->name ); ?>">
+						<?php esc_html_e('View Files &rarr;', 'sharedrive'); ?> 
+					</a>
+				</p>
+				<hr/>
+				<p>
+					<?php 
+						printf( 
+							esc_html__(
+								'File size limit %s per file.', 
+								'sharedrive'
+							), 
+							'<strong>' . Helpers::formatSize( wp_max_upload_size() ) . '</strong>'
+							); 
+					?>
+				</p>
+				<p>
+			    	<a id="sharedrive-browse-files" class="button button-secondary" href="javascript:;">
+			    		<?php echo esc_html_e('Browse File', 'sharedrive'); ?>
+			    	</a>
+			    	<a id="sharedrive-start-upload" class="button button-disabled button-secondary" href="javascript:;">
+			    		<?php echo esc_html_e('Start Upload', 'sharedrive'); ?>
+			    	</a>
+		    	</p>
+		    	
 		    	<p class="description">
 		    		<?php esc_html_e("Click 'Browse File' to get started. You can select multiple files.", 'sharedrive'); ?>
 		    	</p>
