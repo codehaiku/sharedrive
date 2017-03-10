@@ -32,6 +32,18 @@ $file = new Sharedrive\File( $pid, $_FILES );
 if ( isset( $_FILES['file']['size'] ) ) {
 	$tmp_file_size = $_FILES['file']['size'];
 }
+
+$file_extension = '';
+
+if ( isset ( $_FILES['file']['name'] ) ) {
+	$file_extension = pathinfo( $_FILES['file']['name'], PATHINFO_EXTENSION );
+}
+
+Sharedrive\File::initMimeTypes();
+
+$allowed_files = Sharedrive\File::getAllowedFileTypes();
+$banned_files = Sharedrive\File::getBannedTypes();
+
 // Basic Validations.
 
 // Only logged-in users are allowed to upload file.
@@ -50,6 +62,36 @@ if ( 0 === $tmp_file_size  ) {
 				)
 		));
 	echo $response;
+	Sharedrive\Helpers::stop();
+}
+
+if ( ! in_array( $file_extension, $allowed_files ) ) {
+	$response = wp_json_encode(
+		array(
+			'status' => 201,
+			'message' => sprintf( 
+						esc_html__('Error uploading file. The file type (.%s) is not allowed', 'sharedrive'), 
+						$file_extension 
+					), 
+			)
+		);
+	echo $response;
+	Sharedrive\Helpers::stop();
+}
+
+if ( in_array( $file_extension, $banned_files ) ) {
+
+	$response = wp_json_encode(
+		array(
+			'status' => 201,
+			'message' =>  sprintf( 
+						esc_html__('Error uploading file. The file type (.%s) is not allowed', 'sharedrive'), 
+						$file_extension 
+					)
+		));
+	
+	echo $response;
+
 	Sharedrive\Helpers::stop();
 }
 
