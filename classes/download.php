@@ -122,7 +122,7 @@ final class Download
 		$file_name = get_post_meta($post_id, 'sharedrive_file_name', true );
 		$upload_dir = wp_upload_dir();
 
-		$file_url = $upload_dir['basedir'] . '/sharedrive/'.absint($post_id).'/'.absint($post_author_id).'/'.$file_name;
+		$file_url = $upload_dir['basedir'] . '/sharedrive/'.absint($post_id).'/'.absint($post_author_id).'/'.$file_name . ".zip";
 
 		return $file_url;
 	}
