@@ -29,6 +29,10 @@ if (! defined('ABSPATH') ) {
 }
 
 class File {
+	
+	protected static $bannedFileTypes = array();
+    protected static $allowedFileTypes = array();
+    protected static $maxFileSize = 0;
 
 	public function __construct( $post_id = 0, $http_file = array() ) {
 
@@ -54,17 +58,80 @@ class File {
 
 		$this->sensio_fs = new Filesystem();
 
+		self::initMimeTypes();
+
 		return $this;
 
 	}
+
+	public static function initMimeTypes() 
+	{
+
+		self::setBannedTypes();
+        self::setAllowedTypesDefault();
+
+	}
+
+	protected static function setAllowedTypesDefault() 
+    {
+        self::$allowedFileTypes = explode(',','jpg,png,gif,zip');
+    }
+
+    public static function getAllowedTypesDefault()
+    {
+        return apply_filters('sharedrive_allowed_mime_types_default', self::$allowedFileTypes );
+    }
+
+    public static function getAllowedFileTypes() {
+        
+        $options = array_filter( explode( ',', get_option('sd_allowed_file_types') ) );
+        
+        if ( ! empty ( $options ) && is_array( $options ) ) {
+            return array_filter( array_map( 'trim', $options ) );
+        }
+
+        return self::getAllowedTypesDefault();
+    }
+
+    protected static function setBannedTypes() 
+    {
+        self::$bannedFileTypes = array('bat', 'cmd', 'php');
+    }
+
+    public static function getBannedTypes() 
+    {
+        return apply_filters('sharedrive_banned_mime_types', self::$bannedFileTypes );
+    }
 
 	public function upload( $type = 'update', $success_message = '' ) {
 
 		try {
 
+			$final_destination = $this->destination . $this->appliedName;
 			// Move from temporary to static directory.
-			$this->sensio_fs->copy( $this->location, $this->destination . $this->appliedName );
-					
+			$this->sensio_fs->copy( $this->location, $final_destination );
+			
+			$zip = new \ZipArchive;
+			$zip_name = $final_destination . ".zip";
+
+			if ( $zip->open( $zip_name, \ZipArchive::CREATE ) !== TRUE ) {
+			   	
+			   	$response = wp_json_encode(array(
+					'status' => 201,
+					'message' => esc_attr__('Error: Unable to zip the file.', 'sharedrive')
+				));
+
+				echo $response;
+
+			} else {
+				// The the file to zip connection.
+				$zip->addFile( $final_destination, $this->appliedName );
+				// And close it.
+				$zip->close();
+				// Then, delete the file.
+				$this->sensio_fs->remove( $final_destination );
+			}
+
 			// Update the post meta.
 			if ( 'update' === $type ) {
 				update_post_meta( absint( $this->post_id ), 'sharedrive_file_name', $this->appliedName );
@@ -131,5 +198,31 @@ class File {
 			$this->upload( $type, $success_message );
 		}
 	}
-	
+
+	public static function delete( $post_id  = 0 ) {
+
+		if ( empty ( $post_id ) ) {
+			return;
+		}
+		
+		$file = get_post( $post_id );
+
+		if ( 'file' === $file->post_type ) {
+			
+			$fs = new Filesystem();
+
+			$upload_dir = wp_upload_dir();
+
+			$sharedrive_upload_dir = trailingslashit( trailingslashit( $upload_dir['basedir'] ) . 'sharedrive' );
+			
+			$user_upload_dir = $sharedrive_upload_dir . trailingslashit( $post_id );
+
+			$fs->remove( $user_upload_dir  );
+
+		}
+
+		return;
+
+	}
+
 }
