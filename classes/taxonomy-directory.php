@@ -159,7 +159,7 @@ final class TaxonomyDirectory
 								'There are %s files attached in this directory.', 
 								'sharedrive'
 							), 
-							'<strong>' . absint( $instance->count ) . '</strong>'
+							'<strong id="taxonomy-sd-count-file">' . absint( $instance->count ) . '</strong>'
 						); 
 					?>
 					<?php $directory_link = get_term_link( absint( $instance->term_id ), $instance->taxonomy); ?>
