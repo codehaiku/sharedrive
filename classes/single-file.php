@@ -41,11 +41,13 @@ final class SingleFile {
 	}
 
 	public function enqueue() {
-		wp_enqueue_style( 'sharedrive-css', 
-			SHAREDRIVE_DIR_URL . 'assets/css/sharedrive.css', 
-			array(),
-			SHAREDRIVE_VERSION,
-			'all');
+		if ( is_singular( 'file' ) ) {
+			wp_enqueue_style( 'sharedrive-css', 
+				SHAREDRIVE_DIR_URL . 'assets/css/sharedrive.css', 
+				array(),
+				SHAREDRIVE_VERSION,
+				'all');
+		}
 	}
 
 	public function renderFileWindow( $content ) {
