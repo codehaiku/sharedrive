@@ -34,6 +34,7 @@ if (! defined('ABSPATH') ) {
  * @since    1.0  
  */
 final class SingleFile {
+	
 	public function __construct() {
 		add_filter('the_content', array( $this, 'renderFileWindow' ));
 		add_action('wp_enqueue_scripts', array( $this, 'enqueue' ) );
@@ -55,7 +56,7 @@ final class SingleFile {
 			$content .= $file_window;
 			return $content;
 		}
-		return;
+		return $content;
 	}
 }
 
