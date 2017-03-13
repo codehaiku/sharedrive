@@ -80,6 +80,9 @@ require_once SHAREDRIVE_DIR_PATH . 'classes/helpers.php';
 // Include Sharedrive Shortcodes.
 require_once SHAREDRIVE_DIR_PATH . 'classes/file.php';
 
+// Include Sharedrive Privacy
+require_once SHAREDRIVE_DIR_PATH . 'classes/privacy.php';
+
 // Include Post Type Registration Class.
 require_once SHAREDRIVE_DIR_PATH . 'classes/post-type-file.php';
 
