@@ -40,10 +40,39 @@ final class FilePostType
        
         add_action( 'init', array( $this, 'index' ) );
         add_action( 'delete_post', array( 'Sharedrive\File', 'delete' ), 10 );
+        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
+        add_action( 'save_post', array( $this, 'setDefaultTerm') , 100, 2 );
+
         register_activation_hook( __FILE__, 'flushOnActivate' );
 
     }
 
+    public function setDefaultTerm() {
+        $file = Helpers::getPost();
+        $post_id = filter_input( INPUT_POST, 'post_ID', FILTER_SANITIZE_NUMBER_INT );
+        if ( ! empty( $post_id ) ) {
+            if ( $file->post_type === 'file' ) {
+                $defaults = array(
+                    'directory' => array( 'root' )
+                );
+                $taxonomies = get_object_taxonomies( $file->post_type );
+
+                foreach ( (array) $taxonomies as $taxonomy ) {
+                    $terms = wp_get_post_terms( $post_id, $taxonomy );
+                    if ( empty( $terms ) && array_key_exists( $taxonomy, $defaults ) ) {
+                        wp_set_object_terms( $post_id, $defaults[$taxonomy], $taxonomy );
+                    }
+                }
+            }
+        }
+    }
+
+    public function enqueue() {
+        if ( is_post_type_archive('file') ) {
+            wp_enqueue_style( 'sharedrive', SHAREDRIVE_DIR_URL . 'assets/css/sharedrive-archive.css', false );
+            wp_enqueue_style( 'font-awesome', SHAREDRIVE_DIR_URL . 'assets/css/font-awesome.min.css', false );
+        }
+    }
     /**
      * Redirects pages into our login page.
      *
