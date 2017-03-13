@@ -48,8 +48,17 @@ final class TaxonomyDirectory
 
 		add_action( 'wp_ajax_file_bulk_upload_action', array( $this, 'fileBulkUploadAction' )); 
 
+        add_action( 'wp', array( $this, 'taxonomyStyleSheet' )); 
+
         register_activation_hook( __FILE__, 'flushOnActivate' );
 
+	}
+
+	public function taxonomyStyleSheet() {
+		if ( is_tax('directory') ) {
+            wp_enqueue_style( 'sharedrive', SHAREDRIVE_DIR_URL . 'assets/css/sharedrive-archive.css', false );
+            wp_enqueue_style( 'font-awesome', SHAREDRIVE_DIR_URL . 'assets/css/font-awesome.min.css', false );
+        }
 	}
 
 	public function fileBulkUploadAction() {
