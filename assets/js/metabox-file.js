@@ -138,7 +138,8 @@ jQuery( document ).ready( function($) {
             var file_name = '';
 
             $('#filelist').append('<li class="sd-success">' + server_response.message + '</li>');
-
+            
+            $('#title-prompt-text').remove();
             $('input#title').val(file.name);
             $('#new-post-slug').val(file.name);
             $('#sd-current-file-object').html( $('input#title').val() );
