@@ -56,6 +56,7 @@ jQuery( document ).ready( function($) {
             return;
 
         } else {
+
             this.trigger('Error', {
                 code : plupload.FILE_SIZE_ERROR,
                 message : plupload.translate('Error: The selected type of file is currently not supported.' ),
@@ -65,19 +66,23 @@ jQuery( document ).ready( function($) {
             instanceCallBack(false);
             
             return;
+
         }
 
     });
 
-      // Upload Filter Error
+    uploader.bind( 'FilesAdded', function( up, files ) {
+        $('#sharedrive-start-upload').removeClass('button-disabled').addClass('button-primary');
+    });
+
+    // Upload Filter Error
     plupload.addFileFilter('max_file_size', function(maxSize, file, instanceCallBack) {
         var undef;
-        console.log(maxSize);
         // Invalid file size
         if ( file.size !== undef && maxSize && file.size > maxSize) {
             this.trigger('Error', {
                 code : plupload.FILE_SIZE_ERROR,
-                message : plupload.translate('Error: The selected file size exceeds the maximum upload size.' ),
+                message : plupload.translate('Error: The selected file\'s size exceeds the maximum upload size.' ),
                 file : file
             });
             instanceCallBack(false);
@@ -128,12 +133,17 @@ jQuery( document ).ready( function($) {
         if ( 200 === server_response.status ) {
 
             var file_name = '';
+            var file_count = parseInt( $('#taxonomy-sd-count-file').text() );
 
             $('#'+file.id).append('<span class="sd-success"> (' + server_response.message + ').</span>');
 
             $('input#title').val(file.name);
             $('#new-post-slug').val(file.name);
             $('#sd-current-file-object').html( $('input#title').val() );
+
+            file_count += 1;
+
+            $('#taxonomy-sd-count-file').text( file_count );
 
         }
 
