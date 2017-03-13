@@ -61,24 +61,85 @@ final class MetaBoxFile {
 	        array( $this, 'metaBoxForm' ),
 	        'file', 'normal', 'high'
 	    );
+
+	    add_meta_box( 
+	        'sharedrive-file-metabox-privacy',
+	        sprintf( __( 'File Privacy', 'sharedrive' ), Helpers::formatSize( wp_max_upload_size() ) ),
+	        array( $this, 'metaBoxPrivacy' ),
+	        'file', 'normal', 'high'
+	    );
 	    
 	}
 
+	public function metaBoxPrivacy() {
+
+		$privacy = new Privacy();
+
+		$default_privacy = 'private';
+		$saved_privacy = get_post_meta( Helpers::getPostID(), 'sd-file-privacy', true );
+
+		if ( ! empty ( $saved_privacy ) ) {
+			$default_privacy = $saved_privacy;
+		}
+
+		$privacies = $privacy->getCollection( $default_privacy );
+		?>
+		
+		<?php if ( ! empty( $privacies ) ) { ?>
+		<p>
+			<select id="sharedrive-privacy-field" name="sd-file-privacy">
+				<?php foreach( $privacies as $privacy ) { ?>
+					<?php $selected = ''; ?>
+					<?php if ( $privacy['is_default'] ) { ?>
+						<?php $selected = 'selected'; ?>
+					<?php } ?>
+					<option <?php echo $selected; ?> value="<?php echo $privacy['value'];?>">
+						<?php echo $privacy['label']; ?>
+					</option>
+				<?php } ?>
+			</select>
+		</p>
+		<?php } ?>
+		
+		<p>
+			<label for="sd-file-privacy-users">
+				<strong><?php esc_html_e('Select Members', 'sharedrive'); ?></strong>
+			</label>
+			<input placeholder="Start by typing the name of the user..." class="widefat" type="text" value="" name="sd-file-sharing-users"  id="sd-file-sharing-users" />
+				<span class="description">
+				<?php esc_html_e('Use the text field above to share this file to specific users.', 'sharedrive'); ?>
+			</span>
+		</p>
+		
+		<?php
+	}
+
 	public function metaBoxFileDetails () {
+		
 		$post_id = Helpers::getPostID();
+		$sharedrive_file_name = get_post_meta( $post_id, 'sharedrive_file_name', true );
+		$sharedrive_file_type = get_post_meta( $post_id, 'sharedrive_file_type', true );
+		$sharedrive_file_size = Helpers::formatSize( get_post_meta( $post_id, 'sharedrive_file_size', true ) );
+
+		if ( empty( $sharedrive_file_name ) ) {
+			esc_html_e('No physical file found. Use the \'File Update\' metabox to upload new file.', 'sharedrive');
+			return;
+		}
+
 		?>
 		<table class="wp-list-table widefat fixed striped">
-			
-			<?php $sharedrive_file_name = get_post_meta( $post_id, 'sharedrive_file_name', true ); ?>
-			<?php $sharedrive_file_type = get_post_meta( $post_id, 'sharedrive_file_type', true ); ?>
-			<?php $sharedrive_file_size = Helpers::formatSize( get_post_meta( $post_id, 'sharedrive_file_size', true ) ); ?>
-
+		
 			<?php if ( ! empty( $sharedrive_file_name ) ) { ?>
 				<tr>
 					<th><strong><?php echo esc_html_e('Name', 'sharedrive'); ?></strong></th>
 					<td><?php echo esc_html( $sharedrive_file_name ); ?></td>
 				</tr>
 			<?php } ?>
+			<tr>
+				<th><strong>Sharing Option</strong></th>
+				<td><?php echo ucwords( str_replace( '_', ' ', get_post_meta( $post_id, 'sharedrive_file_privacy', true ) ) ); ?></td>
+			</tr>
+
 			<?php if ( ! empty( $sharedrive_file_type ) ) { ?>
 				<tr>
 					<th><strong><?php echo esc_html_e('Type', 'sharedrive'); ?></strong></th>
@@ -95,6 +156,7 @@ final class MetaBoxFile {
 				<th><strong>No. Downloads</strong></th>
 				<td><?php echo absint( get_post_meta( $post_id, 'sharedrive_file_download', true ) ); ?></td>
 			</tr>
+			
 		</table>
 		<?php
 	}
@@ -117,6 +179,10 @@ final class MetaBoxFile {
 		/* If the new meta value does not match the old value, update it. */
 		if ( isset( $_POST['sd-file-description'] ) ) {
 			update_post_meta( $post_id, 'sd-file-description', $_POST['sd-file-description'] );
+		}
+
+		if ( isset( $_POST['sd-file-privacy'] ) ) {
+			update_post_meta( $post_id, 'sharedrive_file_privacy', $_POST['sd-file-privacy'] );
 		}
 		/* If there is no new meta value but an old value exists, delete it. */
 		
