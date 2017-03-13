@@ -95,6 +95,9 @@ if ( in_array( $file_extension, $banned_files ) ) {
 	Sharedrive\Helpers::stop();
 }
 
-$file->processHttpUpload( 'update', esc_html__('File has been successfully uploaded. Please save/update the post', 'sharedrive') );
+$file->processHttpUpload( 'update', 
+	esc_html__('File has been successfully uploaded. 
+		Please save/update the post', 'sharedrive') 
+	);
 
 Sharedrive\Helpers::stop();
