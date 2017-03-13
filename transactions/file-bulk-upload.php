@@ -111,6 +111,7 @@ if ( isset( $_FILES['file'] ) ) {
 				'sharedrive_file_name' => $destination_file_name,
 				'sharedrive_file_type' => $type,
 				'sharedrive_file_size' => $size,
+				'sharedrive_file_privacy' => 'private',
 			)
 	);
 	 
