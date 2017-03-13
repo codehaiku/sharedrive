@@ -19,7 +19,7 @@
 
 namespace Sharedrive;
 
-if (! defined('ABSPATH') ) {
+if ( !defined('ABSPATH') ) {
     return;
 }
 
@@ -56,7 +56,5 @@ class Privacy extends File {
 		}
 	
 		return apply_filters('sharedrive_privacy_collection', $collection );
-		
 	}
 }
-?>
