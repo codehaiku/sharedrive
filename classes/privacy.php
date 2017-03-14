@@ -41,11 +41,6 @@ class Privacy extends File {
 				'label' => esc_html__('Public', 'sharedrive'),
 				'value' => 'public',
 				'is_default' => false
-			),
-			array(
-				'label' => esc_html__('Selected Users', 'sharedrive'),
-				'value' => 'selected_users',
-				'is_default' => false
 			)
 		);
 
