@@ -110,7 +110,7 @@ final class FilePostType
             'has_archive'        => true,
             'hierarchical'       => false,
             'menu_position'      => null,
-            'supports'           => array( 'title', 'author','comments' ),
+            'supports'           => array( 'title','comments' ),
             'menu_icon'          => 'dashicons-media-archive',
         );
 
