@@ -76,7 +76,7 @@ final class MetaBoxFile {
 		$privacy = new Privacy();
 
 		$default_privacy = 'private';
-		$saved_privacy = get_post_meta( Helpers::getPostID(), 'sd-file-privacy', true );
+		$saved_privacy = get_post_meta( Helpers::getPostID(), 'sharedrive_file_privacy', true );
 
 		if ( ! empty ( $saved_privacy ) ) {
 			$default_privacy = $saved_privacy;
@@ -105,7 +105,9 @@ final class MetaBoxFile {
 			<label for="sd-file-privacy-users">
 				<strong><?php esc_html_e('Select Members', 'sharedrive'); ?></strong>
 			</label>
-			<input placeholder="Start by typing the name of the user..." class="widefat" type="text" value="" name="sd-file-sharing-users"  id="sd-file-sharing-users" />
+			<?php $meta_file_users = (array)get_post_meta( Helpers::getPostID(), 'sharedrive_file_privacy_users', true ); ?>
+			<?php $privacy_users = implode(',', $meta_file_users ); ?>
+			<input placeholder="Start by typing the name of the user..." class="widefat" type="text" name="sd-file-privacy-users"  id="sd-file-privacy-users" value="<?php echo $privacy_users ?>" />
 				<span class="description">
 				<?php esc_html_e('Use the text field above to share this file to specific users.', 'sharedrive'); ?>
 			</span>
@@ -173,6 +175,8 @@ final class MetaBoxFile {
 	public function processMetaBoxOnSave() {
 		
 		$post_id = Helpers::getPostID();
+		
+
 		/* Verify the nonce before proceeding. */
 		/* Check if the current user has permission to edit the post. */
 		/* Get the posted data and sanitize it for use as an HTML class. */
@@ -183,6 +187,11 @@ final class MetaBoxFile {
 
 		if ( isset( $_POST['sd-file-privacy'] ) ) {
 			update_post_meta( $post_id, 'sharedrive_file_privacy', $_POST['sd-file-privacy'] );
+		}
+
+		if ( isset( $_POST['sd-file-privacy-users'] ) ) {
+			$file_users = explode( ',', $_POST['sd-file-privacy-users'] );
+			update_post_meta( $post_id, 'sharedrive_file_privacy_users', array_filter( array_map( 'trim', $file_users ), 'is_numeric' ) );
 		}
 		/* If there is no new meta value but an old value exists, delete it. */
 		
