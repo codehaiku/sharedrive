@@ -39,12 +39,27 @@ final class FilePostType
     public function __construct() {
        
         add_action( 'init', array( $this, 'index' ) );
+        add_action( 'init', array( $this, 'setDirectoryCookies' ) );
         add_action( 'delete_post', array( 'Sharedrive\File', 'delete' ), 10 );
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
         add_action( 'save_post', array( $this, 'setDefaultTerm') , 100, 2 );
 
         register_activation_hook( __FILE__, 'flushOnActivate' );
 
+    }
+
+    public function setDirectoryCookies() {
+       
+       $show = filter_input( INPUT_GET, 'show', FILTER_SANITIZE_STRING );
+
+        if ( ! empty( $show ) ) {
+            // First delete the cookie
+            setcookie( 'sharedrive_listing_view', $show, time() - 3600, '/' );
+            // then add value
+            setcookie( 'sharedrive_listing_view', $show, strtotime('+2 day'), '/' );
+        }
+
+        return;
     }
 
     public function setDefaultTerm() {
