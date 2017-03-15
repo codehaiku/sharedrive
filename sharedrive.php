@@ -101,6 +101,8 @@ require_once SHAREDRIVE_DIR_PATH . 'classes/single-file.php';
 // Include Breadcrumb
 require_once SHAREDRIVE_DIR_PATH . 'classes/breadcrumb.php';
 
+require_once SHAREDRIVE_DIR_PATH . 'classes/listing.php';
+
 // Include Sharedrive Shortcodes.
 require_once SHAREDRIVE_DIR_PATH . 'shortcodes/shortcodes.php';
 
