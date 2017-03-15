@@ -41,16 +41,21 @@ final class TaxonomyDirectory
 		
 		add_action('init', array( $this, 'registerTaxonomy' ));
 		
-		//add_action( 'directory_add_form_fields', array( $this, 'directoryAddFileField' ), 10, 2 );
+        add_action( 'wp', array( $this, 'taxonomyStyleSheet' )); 
+
 		add_action( 'directory_edit_form_fields', array( $this, 'directoryEditFileField' ), 10, 2 );
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
+        add_action( 'edited_directory', array( $this, 'save_taxonomy_custom_meta' ), 10, 2 );  
+		
+		add_action( 'create_directory', array( $this, 'save_taxonomy_custom_meta' ), 10, 2 );
 
 		add_action( 'wp_ajax_file_bulk_upload_action', array( $this, 'fileBulkUploadAction' )); 
 
-        add_action( 'wp', array( $this, 'taxonomyStyleSheet' )); 
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 
         register_activation_hook( __FILE__, 'flushOnActivate' );
+
+        return;
 
 	}
 
@@ -120,18 +125,6 @@ final class TaxonomyDirectory
 
         return;
     }
-
-    // Add term page
-	public function directoryAddFileField() {
-	// this will add the custom meta field to the add new term page
-	?>
-		<div class="form-field">
-			<label for="term_meta[custom_term_meta]"><?php _e( 'Example meta field', 'sharedrive' ); ?></label>
-			<input type="text" name="term_meta[custom_term_meta]" id="term_meta[custom_term_meta]" value="">
-			<p class="description"><?php _e( 'Enter a value for this field','sharedrive' ); ?></p>
-		</div>
-	<?php
-	}
 
 	public function directoryEditFileField( $instance, $taxonomy ) {
 	
@@ -203,7 +196,77 @@ final class TaxonomyDirectory
 			</div>
 		</td>
 	</tr>	
+	<tr class="form-field">
+		<th scope="row" valign="top">
+			<label for="term_meta[custom_term_meta]">
+				<?php esc_html_e( 'Privacy', 'sharedrive' ); ?>
+			</label>
+		</th>
+		<td>
+		<?php
+			$privacy = new Privacy();
+
+			$default_privacy = 'private';
+			$term_id = filter_input( INPUT_GET, 'tag_ID', FILTER_SANITIZE_NUMBER_INT );
+			$saved_privacy = get_term_meta( $term_id, 'sharedrive_directory_privacy', true );
+
+			if ( ! empty ( $saved_privacy ) ) {
+				$default_privacy = $saved_privacy;
+			}
+
+			$privacies = $privacy->getCollection( $default_privacy );
+			?>
+			
+			<?php if ( ! empty( $privacies ) ) { ?>
+			<p>
+				<select id="sharedrive-privacy-field" name="sd-file-privacy">
+					<?php foreach( $privacies as $privacy ) { ?>
+						<?php $selected = ''; ?>
+						<?php if ( $privacy['is_default'] ) { ?>
+							<?php $selected = 'selected'; ?>
+						<?php } ?>
+						<option <?php echo $selected; ?> value="<?php echo $privacy['value'];?>">
+							<?php echo $privacy['label']; ?>
+						</option>
+					<?php } ?>
+				</select>
+			</p>
+		<?php } ?>
+		
+		<p>
+			<label for="sd-file-privacy-users">
+				<strong><?php esc_html_e('Select Members', 'sharedrive'); ?></strong>
+			</label>
+			<?php $meta_directory_users = (array)get_term_meta( $term_id, 'sharedrive_directory_privacy_users', true ); ?>
+			<?php $privacy_users = implode(',', $meta_directory_users ); ?>
+			<input placeholder="Start by typing the name of the user..." class="widefat" type="text" name="sd-file-privacy-users"  id="sd-file-privacy-users" value="<?php echo $privacy_users ?>" />
+				<span class="description">
+				<?php esc_html_e('Use the text field above to share this file to specific users.', 'sharedrive'); ?>
+			</span>
+		</p>
+		</td>
+	</tr>
 	<?php
+	}
+
+	public function save_taxonomy_custom_meta( $term_id ) {
+
+		if ( isset( $_POST['sd-file-privacy'] ) ) {
+			update_term_meta( $term_id, 'sharedrive_directory_privacy', $_POST['sd-file-privacy'] );
+		} else {
+			update_term_meta( $term_id, 'sharedrive_directory_privacy', 'private' );
+		}
+
+		$directory_users = explode( ',', $_POST['sd-file-privacy-users'] );
+		
+		if ( isset( $_POST['sd-file-privacy-users'] ) ) {
+			update_term_meta( $term_id, 'sharedrive_directory_privacy_users', $directory_users );
+		} else {
+			update_term_meta( $term_id, 'sharedrive_directory_privacy_users', '' );
+		}
+
+		return;
+
 	}
 }
 
