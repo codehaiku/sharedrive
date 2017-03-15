@@ -23,6 +23,14 @@ class Listing {
 
 		if ( 'user_file' === $this->getListingType() ) {
 			$defaults['meta_query'] = array(
+				array(
+					'key' => 'sharedrive_file_owner',
+					'value' => absint( get_current_user_id() ),
+					'compare' => '='
+				)
+			);
+		} else {
+			$defaults['meta_query'] = array(
 				'relation' => 'OR',
 				array(
 						'key' => 'sharedrive_file_privacy',
@@ -53,18 +61,38 @@ class Listing {
 	public function getCurrentDirectories() {
 		
 		$root = get_term_by('slug', 'root', 'directory' );
+
+		if ( empty( $root ) ) {
+			return array();
+		}
+
 		$parent = 0;
 		
 		if ( is_tax('directory') ) {
 			$parent = get_queried_object()->term_id;
 		}
 
-		$directories = get_terms( array(
-		    'taxonomy' => 'directory',
-		    'hide_empty' => false,
-		    'parent' => $parent,
-		    'exclude' => $root->term_id
-		));
+		$directories = get_terms( 
+			array(
+		    	'taxonomy' => 'directory',
+		    	'hide_empty' => false,
+		    	'parent' => $parent,
+		    	'exclude' => $root->term_id,
+		    	'meta_query' => array(
+		    			'relation' => 'OR',
+		    			array(
+	    					'key' => 'sharedrive_directory_privacy',
+	    					'value' => 'public',
+	    					'compare' => '='
+	    				),
+		    			array(
+							'key' => 'sharedrive_directory_privacy_users',
+							'value' => serialize( strval( absint( get_current_user_id() ) ) ),
+							'compare' => 'LIKE'
+						)
+		    		)
+			)
+		);
 
 		if ( ! empty( $directories ) ) {
 			return $directories;
