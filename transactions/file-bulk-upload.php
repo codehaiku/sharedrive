@@ -112,9 +112,10 @@ if ( isset( $_FILES['file'] ) ) {
 				'sharedrive_file_type' => $type,
 				'sharedrive_file_size' => $size,
 				'sharedrive_file_privacy' => 'private',
+				'sharedrive_file_owner' => absint( get_current_user_id() ),
 			)
 	);
-	 
+
 	// Insert the post into the database
 	$file_id = wp_insert_post( $new_file );
 
