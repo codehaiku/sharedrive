@@ -158,6 +158,11 @@ final class MetaBoxFile {
 				<th><strong>No. Downloads</strong></th>
 				<td><?php echo absint( get_post_meta( $post_id, 'sharedrive_file_download', true ) ); ?></td>
 			</tr>
+
+			<tr>
+				<th><strong>Owner</strong></th>
+				<td><?php echo absint( get_post_meta( $post_id, 'sharedrive_file_owner', true ) ); ?></td>
+			</tr>
 			
 		</table>
 		<?php
