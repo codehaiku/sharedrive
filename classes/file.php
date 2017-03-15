@@ -137,6 +137,7 @@ class File {
 				update_post_meta( absint( $this->post_id ), 'sharedrive_file_name', $this->appliedName );
 				update_post_meta( absint( $this->post_id ), 'sharedrive_file_type', $this->type );
 				update_post_meta( absint( $this->post_id ), 'sharedrive_file_size', $this->size );
+				update_post_meta( absint( $this->post_id ), 'sharedrive_file_owner', absint( get_current_user_id() ) );
 			}
 
 			$response = wp_json_encode(array(
