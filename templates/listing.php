@@ -22,6 +22,15 @@
 						</a>
 					</h3>
 				</li>
+				<li class="file-date file-column">
+					Directory
+				</li>
+				<li class="file-scope file-column">
+					<?php echo get_term_meta( $directory->term_id, 'sharedrive_directory_privacy', true ); ?>
+				</li>
+				<li class="file-owner file-column">
+					-
+				</li>
 			</ul>
 		<?php } ?>
 	<?php } ?>
