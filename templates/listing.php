@@ -83,4 +83,7 @@
 
 	<?php wp_reset_postdata(); ?>
 
+	<div id="sharedrive-file-upload-form">
+		<?php Sharedrive\FileUploadForm::renderForm(); ?>
+	</div>
 </div><!--#sharedrive-container-->
