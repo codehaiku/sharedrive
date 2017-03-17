@@ -6,7 +6,11 @@ class Listing {
 	
 	var $params = array();
 
-	public function __construct( $args = array() ) {
+	public function __construct( $args = array(), $skip = false ) {
+
+		if ( $skip ) {
+			return $this;
+		}
 
 		$defaults = array(
 			'post_type' => 'file',
@@ -46,7 +50,8 @@ class Listing {
 		}
 
 		$this->query_args = wp_parse_args( $args, $defaults );
-
+		
+		return $this;
 
 	}
 
