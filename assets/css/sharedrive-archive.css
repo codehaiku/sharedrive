@@ -148,3 +148,165 @@ ul.sharedrive-actions-list li a {
     background: #37474F;
 }
 
+.clearfix {
+    display: block;
+    clear: both;
+}
+
+#sharedrive-actions-file-type-filter {
+    float: left;
+}
+
+#sharedrive-actions-internals {
+    float: right;
+}
+
+#sharedrive-actions-internals .sharedrive-actions-internals-list {
+    padding-left: 0;
+    width: 150px;
+    margin-bottom: 0;
+    text-align: right;
+}
+
+#sharedrive-actions-internals .sharedrive-actions-internals-list li {
+    list-style: none;
+}
+
+#sharedrive-actions-internals .sharedrive-actions-internals-list-item {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+    position: relative;
+}
+
+#sharedrive-actions-internals .sharedrive-actions-internals-list-item a {
+    padding: 0 10px;
+}
+
+#sharedrive-actions-internals .sd-actions-internals-itm-primary .fa-folder {
+    font-size: 21px;
+}
+
+#sharedrive-actions-internals .sd-actions-internals-itm-primary .fa-file {
+    color: #607D8B;
+}
+
+#sharedrive-actions-internals .sd-actions-internals-itm-primary {
+    font-size: 16px;
+    position: relative;
+}
+
+#sharedrive-actions-internals .sd-actions-internals-itm-plus {
+    position: absolute;
+    top: 7px;
+    color: #252323;
+    right: 6px;
+}
+
+#sharedrive-actions-internals .sd-actions-internals-itm-plus .plus-square-o-file {
+    margin-top: 1px;
+    display: block;
+}
+
+#sharedrive-file-upload-form-wrap {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1.5px 1px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+#sharedrive-file-upload-form-wrap .sd-file-upload-form-header,
+#sharedrive-file-upload-form-wrap .sd-file-upload-form-body {
+    padding: 15px 25px;
+}
+
+.sd-file-upload-form-header {
+     background: #607d8b;
+    border-radius: 4px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.sd-file-upload-form-body {
+    background: #ECEFF1;
+    border-radius: 4px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+
+.sd-file-upload-form-header > h3 {
+    margin-bottom: 0;
+    color: #ECEFF1;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.sd-file-upload-form-backdrop {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0,0,0,0.80);
+    z-index: 99999;
+    display: none;
+}
+
+.sd-file-upload-form-backdrop.active {
+    display: table;
+}
+
+.sd-file-upload-form {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 25px;
+}
+
+.sd-file-upload-form-inner-wrap {
+    max-width: 648px;
+    display: block;
+    margin: 0 auto;
+    margin-top: -150px;
+}
+
+.content-area ul#sd-form-upload-progress-window-ul,
+ul#sd-form-upload-progress-window-ul {
+    padding: 0;
+    margin: 0;
+}
+
+#sd-form-upload-progress-window-ul li  span.sd-file-progress-file {
+    position: relative;
+    z-index: 30;
+}
+
+#sd-form-upload-progress-window-ul li {
+    list-style: none;
+    padding: 10px 10px;
+    background: #e2e2e2;
+    border: 1px solid #cacaca;
+    margin-bottom: -1px;
+    position: relative;
+    z-index: 20;
+}
+
+#sd-form-upload-progress-window-ul li:last-child {
+    margin-bottom: 30px;
+}
+
+span.sd-error.description {
+    display: block;
+    color: #D32F2F;
+    position: relative;
+    font-size: 12px;
+}
+
+#sd-form-upload-progress-window-ul li .sd-file-progress {
+    content: " ";
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    background: rgba(203, 255, 143, 0.66);
+    top: 0;
+    left: 0;
+}
+
