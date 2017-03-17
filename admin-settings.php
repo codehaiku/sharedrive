@@ -154,25 +154,7 @@ final class AdminSettings
     }
 
     public function adminJsConfig() {
-        File::initMimeTypes();
-        $allowed_mime_types = preg_replace( '/\s+/', '', str_replace( ' ', '', implode( ',', File::getAllowedFileTypes() ) ) );
-        $banned_mime_types = File::getBannedTypes();
-        ?>
-        <script>
-            var sharedrive = {
-                settings: {
-                    mime_types_allowed: [
-                        { title : "Files Allowed", extensions : "<?php echo trim( $allowed_mime_types ); ?>" }
-                    ],
-                    mime_types_banned: {
-                        types: ".<?php echo implode(',.', $banned_mime_types) ; ?>",
-                        regex: /(\.bat|\.cmd|\.php)$/i
-                    },
-                    max_file_size: <?php echo wp_max_upload_size(); ?>
-                }
-            }
-        </script>
-        <?php /* ;*/
+        FileUploadForm::uploadSettings();
     }
 
 }
