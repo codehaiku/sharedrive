@@ -84,6 +84,26 @@
 	<?php wp_reset_postdata(); ?>
 
 	<div id="sharedrive-file-upload-form">
-		<?php Sharedrive\FileUploadForm::renderForm(); ?>
+		<div class="sharedrive-modal-form">
+			<div class="sharedrive-modal-form-backdrop">
+				<div class="sharedrive-modal-upload-form" id="sharedrive-modal-upload-form-new-file">
+					<div class="sharedrive-modal-form-wrap">
+						<?php Sharedrive\FileUploadForm::renderForm(); ?>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+
+	<div id="sharedrive-create-directory-form">
+		<div class="sharedrive-modal-form">
+			<div class="sharedrive-modal-form-backdrop">
+				<div class="sharedrive-modal-upload-form" id="sharedrive-modal-upload-form-new-dir">
+					<div class="sharedrive-modal-form-wrap">
+						<?php Sharedrive\FileUploadForm::createDirectoryForm(); ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
 </div><!--#sharedrive-container-->
