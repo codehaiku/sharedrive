@@ -38,7 +38,7 @@ if (! defined('ABSPATH') ) {
 final class TaxonomyDirectory
 {
 	public function __construct() {
-		
+			
 		add_action('init', array( $this, 'registerTaxonomy' ));
 		
         add_action( 'wp', array( $this, 'taxonomyStyleSheet' )); 
@@ -67,7 +67,7 @@ final class TaxonomyDirectory
 	}
 
 	public function fileBulkUploadAction() {
-
+		
 		require_once SHAREDRIVE_DIR_PATH . 'transactions/file-bulk-upload.php';
 
 		return;
