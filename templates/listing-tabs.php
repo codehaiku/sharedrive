@@ -21,15 +21,7 @@ $tabs_urls = $this->getTabsLink();
 	</div>
 	<div id="sharedrive-actions-internals">
 		<ul class="sharedrive-actions-internals-list">
-			<li class="sharedrive-actions-internals-list-item">
-				<a href="#" id="sharedrive-actions-new-dir" title="<?php esc_attr_e('Create new Directory', 'sharedrive'); ?>">
-					<span class="sd-actions-internals-itm-primary"><i class="fa fa-folder"></i></span>
-					<span class="screen-reader-text">
-						<?php esc_html_e('Create Directory', 'sharedrive'); ?>
-					</span>
-					<span class="sd-actions-internals-itm-plus"><i class="fa fa-plus-square-o"></i></span>
-				</a>
-			</li>
+			
 			<li class="sharedrive-actions-internals-list-item">
 				<a href="#" id="sharedrive-actions-new-files" title="<?php esc_attr_e('Upload Files', 'sharedrive'); ?>">
 					<span class="sd-actions-internals-itm-primary"><i class="fa fa-file"></i></span>
@@ -39,6 +31,17 @@ $tabs_urls = $this->getTabsLink();
 					<span class="sd-actions-internals-itm-plus"><i class="fa fa-plus-square-o plus-square-o-file"></i></span>
 				</a>
 			</li>
+
+			<li class="sharedrive-actions-internals-list-item">
+				<a href="#" id="sharedrive-actions-new-dir" title="<?php esc_attr_e('Create new Directory', 'sharedrive'); ?>">
+					<span class="sd-actions-internals-itm-primary"><i class="fa fa-folder"></i></span>
+					<span class="screen-reader-text">
+						<?php esc_html_e('Create Directory', 'sharedrive'); ?>
+					</span>
+					<span class="sd-actions-internals-itm-plus"><i class="fa fa-plus-square-o"></i></span>
+				</a>
+			</li>
+			
 		</ul>
 	</div>
 	<div class="clearfix"></div>
