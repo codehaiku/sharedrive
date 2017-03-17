@@ -109,7 +109,9 @@ jQuery( document ).ready( function($) {
 
     });
 
-
+    uploader.bind('UploadComplete', function() {
+    	location.reload();
+    });
 
     uploader.bind('FileUploaded', function (instance, file, server ){
         
@@ -160,7 +162,7 @@ jQuery( document ).ready( function($) {
     });
 
     // Backdrop Remove
-    $('.sd-file-upload-form').on('click', function(e){
+    $('.sharedrive-modal-upload-form').on('click', function(e){
     	
     	// Prevent child element 'click' event to be accidentally processed.
     	if ( e.target !== e.currentTarget ) {
@@ -172,6 +174,10 @@ jQuery( document ).ready( function($) {
     });
     // New file
     $('#sharedrive-actions-new-files').on('click', function(){
-    	$('.sd-file-upload-form-backdrop').addClass('active');
+    	$('#sharedrive-modal-upload-form-new-file').parent().addClass('active');
+    });
+
+    $('#sharedrive-actions-new-dir').on('click', function(){
+    	$('#sharedrive-modal-upload-form-new-dir').parent().addClass('active');
     });
 }); 
