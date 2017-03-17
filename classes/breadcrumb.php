@@ -20,6 +20,12 @@ class Breadcrumbs {
 			'home_title'          => esc_html__( 'Shared Files', 'ignite' )
 		);
 
+		$listing = new Listing( array(), true );
+
+		if ( 'user_file' === $listing->getListingType() ) {
+			$defaults['home_title'] = esc_html__( 'My Drive' );
+		}
+
 		$args      = apply_filters( 'sd_breadcrumbs_args', wp_parse_args( $args, $defaults ) );
 		$separator = '<span class="separator"> ' . esc_html( $args['separator_icon'] ) . ' </span>';
 
