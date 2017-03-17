@@ -208,14 +208,14 @@ ul.sharedrive-actions-list li a {
     display: block;
 }
 
-#sharedrive-file-upload-form-wrap {
+.sharedrive-modal-form {
     background: #fff;
     border-radius: 4px;
     box-shadow: 0 1.5px 1px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
-#sharedrive-file-upload-form-wrap .sd-file-upload-form-header,
-#sharedrive-file-upload-form-wrap .sd-file-upload-form-body {
+.sharedrive-modal-form .sd-file-upload-form-header,
+.sharedrive-modal-form .sd-file-upload-form-body {
     padding: 15px 25px;
 }
 
@@ -239,8 +239,14 @@ ul.sharedrive-actions-list li a {
     font-size: 16px;
     font-weight: normal;
 }
+.sd-file-upload-form-header > h3 > strong {
+    font-size: 12px;
+    padding: 5px 10px;
+    box-shadow: inset 0px 0px 8px 2px #455A64;
+    border-radius: 2px;
+}
 
-.sd-file-upload-form-backdrop {
+.sharedrive-modal-form-backdrop {
     position: fixed;
     left: 0;
     top: 0;
@@ -251,17 +257,17 @@ ul.sharedrive-actions-list li a {
     display: none;
 }
 
-.sd-file-upload-form-backdrop.active {
+.sharedrive-modal-form-backdrop.active {
     display: table;
 }
 
-.sd-file-upload-form {
+.sharedrive-modal-upload-form {
     display: table-cell;
     vertical-align: middle;
     padding: 0 25px;
 }
 
-.sd-file-upload-form-inner-wrap {
+.sharedrive-modal-form-wrap {
     max-width: 648px;
     display: block;
     margin: 0 auto;
