@@ -1,10 +1,6 @@
 <?php
 namespace Sharedrive;
 
-add_action('wp', function(){
-	FileUploadForm::getDirectoryId();
-
-});
 class FileUploadForm {
 
 	public function __construct() {
@@ -18,6 +14,10 @@ class FileUploadForm {
 	public static function renderForm() {
 		self::uploadSettings();
 		require_once SHAREDRIVE_DIR_PATH . 'templates/file-upload-form.php';
+	}
+
+	public static function createDirectoryForm() {
+		require_once SHAREDRIVE_DIR_PATH . 'templates/create-directory-form.php';
 	}
 
 	public static function getDirectoryId() {
