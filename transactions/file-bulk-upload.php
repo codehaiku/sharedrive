@@ -39,7 +39,16 @@ if ( ! is_user_logged_in() ) {
 }
 
 if ( empty( $taxonomy_id ) ) {
-	return;
+	$response = wp_json_encode(
+		array(
+			'status' => 201,
+			'message' => sprintf( 
+				__('Error: No directory selected. Please select a directory.', 'sharedrive'), 
+				Sharedrive\Helpers::formatSize( wp_max_upload_size() ) 
+				)
+		));
+	echo $response;
+	Sharedrive\Helpers::stop();
 }
 
 if ( isset( $_FILES['file'] ) ) {
