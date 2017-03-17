@@ -103,6 +103,8 @@ require_once SHAREDRIVE_DIR_PATH . 'classes/breadcrumb.php';
 
 require_once SHAREDRIVE_DIR_PATH . 'classes/listing.php';
 
+require_once SHAREDRIVE_DIR_PATH . 'classes/file-upload-form.php';
+
 // Include Sharedrive Shortcodes.
 require_once SHAREDRIVE_DIR_PATH . 'shortcodes/shortcodes.php';
 
