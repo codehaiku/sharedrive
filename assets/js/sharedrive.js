@@ -2,6 +2,10 @@ jQuery( document ).ready( function($) {
 
 	'use strict';
 
+	if ( typeof sharedrive === "undefined" ) {
+		return;
+	}
+	
     var sharedriveUploaderSettings = {
         browse_button: 'sd-choose-file-btn', // this can be an id of a DOM element or the DOM element itself
         url: sharedrive.ajaxurl,
@@ -180,4 +184,10 @@ jQuery( document ).ready( function($) {
     $('#sharedrive-actions-new-dir').on('click', function(){
     	$('#sharedrive-modal-upload-form-new-dir').parent().addClass('active');
     });
+
+    $(document).keyup(function(e) {
+     if (e.keyCode == 27) { // escape key maps to keycode `27`
+        $('.sharedrive-modal-form-backdrop').removeClass('active');
+    }
+});
 }); 

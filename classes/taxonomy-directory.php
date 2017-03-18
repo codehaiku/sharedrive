@@ -51,6 +51,8 @@ final class TaxonomyDirectory
 
 		add_action( 'wp_ajax_file_bulk_upload_action', array( $this, 'fileBulkUploadAction' )); 
 
+		add_action( 'wp_ajax_sd_create_directory', array( $this, 'createDirectory' ) );
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 
         register_activation_hook( __FILE__, 'flushOnActivate' );
@@ -64,6 +66,14 @@ final class TaxonomyDirectory
             wp_enqueue_style( 'sharedrive', SHAREDRIVE_DIR_URL . 'assets/css/sharedrive-archive.css', false );
             wp_enqueue_style( 'font-awesome', SHAREDRIVE_DIR_URL . 'assets/css/font-awesome.min.css', false );
         }
+	}
+
+	public function createDirectory() {
+
+		require_once SHAREDRIVE_DIR_PATH . 'transactions/directory-new.php';
+
+		return;
+
 	}
 
 	public function fileBulkUploadAction() {
